@@ -29,7 +29,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button3"
+                android:id="@+id/button1"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
@@ -65,7 +65,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button4"
+                android:id="@+id/button3"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
@@ -78,7 +78,7 @@
                 android:background="#cccccc">
             </FrameLayout>
             <Button
-                android:id="@+id/button5"
+                android:id="@+id/button4"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
@@ -101,7 +101,7 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/button6"
+                android:id="@+id/button5"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
@@ -114,7 +114,7 @@
                 android:background="#cccccc">
             </FrameLayout>
             <Button
-                android:id="@+id/button7"
+                android:id="@+id/button6"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
