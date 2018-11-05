@@ -105,7 +105,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:background="@drawable/b5_pressed"/>
             <FrameLayout
                 android:layout_marginBottom="15dp"
                 android:layout_width="1dp"
@@ -117,7 +118,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_margin="30dp"
-                android:layout_weight="1" />
+                android:layout_weight="1"
+                android:background="@drawable/b6_pressed" />
         </LinearLayout>
     </LinearLayout>
 
