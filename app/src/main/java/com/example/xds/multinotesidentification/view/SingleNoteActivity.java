@@ -21,8 +21,13 @@ public class SingleNoteActivity extends AppCompatActivity implements SingleNoteV
 
     void init() {
         textView1 = findViewById(R.id.single_note_text);
-        textView2 = findViewById(R.id.single_freq_text);
+        textView2 = findViewById(R.id.single_error_text);
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     @Override

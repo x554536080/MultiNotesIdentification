@@ -1,10 +1,10 @@
 package com.example.xds.multinotesidentification.model;
 
 public class Complex {
-    private double real;
-    private double image;
+    public double real;
+    public double image;
 
-    Complex() {
+    public Complex() {
         this.real = 0;
         this.image = 0;
     }
