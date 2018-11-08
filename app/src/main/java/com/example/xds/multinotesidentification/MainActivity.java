@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.xds.multinotesidentification.view.MultiNoteActivity;
 import com.example.xds.multinotesidentification.view.ShowFreqActivity;
 import com.example.xds.multinotesidentification.view.SingleNoteActivity;
 
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         button2 = findViewById(R.id.button2);
         button2.setOnClickListener(this);
         button3 = findViewById(R.id.button3);
+        button3.setOnClickListener(this);
         button4 = findViewById(R.id.button4);
         button5 = findViewById(R.id.button5);
         button6 = findViewById(R.id.button6);
@@ -48,6 +50,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.button2:
                 Intent intent2 = new Intent(MainActivity.this, ShowFreqActivity.class);
                 startActivity(intent2);
+                break;
+            case R.id.button3:
+                Intent intent3 = new Intent(MainActivity.this, MultiNoteActivity.class);
+                startActivity(intent3);
                 break;
             default:
                 break;

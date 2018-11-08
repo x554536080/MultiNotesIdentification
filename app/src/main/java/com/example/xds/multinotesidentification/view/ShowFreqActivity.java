@@ -10,7 +10,6 @@ import com.example.xds.multinotesidentification.presenter.PresenterImpl;
 public class ShowFreqActivity extends AppCompatActivity implements ShowFreqView {
 
     TextView freqText;
-
     PresenterImpl presenter;
 
     @Override

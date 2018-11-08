@@ -2,31 +2,37 @@ package com.example.xds.multinotesidentification.presenter;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.util.Log;
 
 import com.example.xds.multinotesidentification.model.Complex;
+import com.example.xds.multinotesidentification.model.MusicalNote;
 
 import org.jtransforms.fft.DoubleFFT_1D;
 
 public class RecordThread extends Thread {
 
-    DoubleFFT_1D fft_1D;
+//    DoubleFFT_1D fft_1D;
 
     PresenterImpl presenter;
     AudioRecord audioRecord;
+    boolean isRecording;
+    int currentActivity;
+
+
     int minBufferSize;
-    Complex[] complexes;
+    Complex complexes[];
 
     String outTemp;
     int point;
 
-    boolean isRecording;
 
     RecordThread(PresenterImpl presenter) {
         this.presenter = presenter;
+        currentActivity = presenter.currentActivity;
         isRecording = false;
         minBufferSize = AudioRecord.getMinBufferSize(8000,
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
@@ -51,7 +57,7 @@ public class RecordThread extends Thread {
             //正常提取
 //            int length = up2int(audioRecord.read(buffer, 0, minBufferSize*8));
 
-            fft_1D = new DoubleFFT_1D(length);
+//            fft_1D = new DoubleFFT_1D(length);
             complexes = new Complex[length];
 
             //自用FFT的处理
@@ -66,8 +72,8 @@ public class RecordThread extends Thread {
                 sort[i][0] = i;
                 sort[i][1] = complexes[i].getIntValue();
             }
-            for (int j = 0; j < length/2; j++) {
-                for (int i = 0; i < length/2 - 1 - j; i++) {
+            for (int j = 0; j < length / 2; j++) {
+                for (int i = 0; i < length / 2 - 1 - j; i++) {
                     if (sort[i][1] < sort[i + 1][1]) {
                         int a = sort[i + 1][0];
                         int b = sort[i + 1][1];
@@ -78,6 +84,49 @@ public class RecordThread extends Thread {
                     }
                 }
             }
+
+            //控制音量足够时才更新
+            if (sort[0][1] < 200000) {
+                continue;
+            }
+
+            /**多音识别部分,活动号等于3**/
+            if (currentActivity == 3) {
+                String strNote[] = new String[3];
+                double strMaxHz[] = new double[3];
+                double errorPercentage[] = new double[3];
+                int Volumn[] = new int[3];
+
+                int i = 0, j = 0;
+                while (i < 3 && j < 256) {
+                    double MaxHz = sort[j][0] * 8000 / (length);
+                    strMaxHz[i] = MaxHz;
+                    strNote[i] = MusicalNote.maxLocation(MaxHz);
+                    errorPercentage[i] = MusicalNote.percentage;
+
+                    if (i > 0) {
+                        int k = i - 1;
+                        while (k >= 0) {
+                            if (strNote[i].equals(strNote[k])) {
+                                j++;
+                                break;
+                            }
+                            k--;
+                        }
+                        if (k < 0) {
+                            i++;
+                            j++;
+                        }
+                    } else {
+                        i++;
+                        j++;
+                    }
+
+                }
+
+                updateMultiNote(strNote[0], strNote[1], strNote[2], strMaxHz[0] + "Hz", strMaxHz[1] + "Hz", strMaxHz[2] + "Hz");
+            }
+
 
             //第三方库的傅里叶处理
 //            double[] data = new double[length * 2];
@@ -114,12 +163,17 @@ public class RecordThread extends Thread {
 
 
             //计算频率和输出显示
-            outTemp = sort[0][0] * 8000.0 / (length) + "";
-            point = outTemp.indexOf(".");
-            if (outTemp.length() - point > 2)
-                update(outTemp.substring(0, point + 3) + "Hz");
-            else update(outTemp.substring(0, point + 2) + "0" + "Hz");
+
+            /**频率显示部分,活动号等于2**/
+            if (currentActivity == 2) {
+                outTemp = sort[0][0] * 8000.0 / (length) + "";
+                point = outTemp.indexOf(".");
+                if (outTemp.length() - point > 2)
+                    updateShowFreq(outTemp.substring(0, point + 3) + "Hz");
+                else updateShowFreq(outTemp.substring(0, point + 2) + "0" + "Hz");
+            }
         }
+        audioRecord.stop();
     }
 
 
@@ -183,11 +237,21 @@ public class RecordThread extends Thread {
         }
     }
 
-    public void update(final String s) {
+    public void updateShowFreq(final String s) {
         ((Activity) presenter.context).runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 presenter.onModifyShowFreqText(s);
+            }
+        });
+    }
+
+    public void updateMultiNote(final String n1, final String n2, final String n3,
+                                final String f1, final String f2, final String f3) {
+        ((Activity) presenter.context).runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                presenter.onModifyMultiNoteText(n1, n2, n3, f1, f2, f3);
             }
         });
     }
