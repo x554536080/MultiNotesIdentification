@@ -74,7 +74,7 @@ public class MultiNoteActivity extends AppCompatActivity implements MultiNoteVie
 
     @Override
     public void onModifyFreqC(String s) {
-        freqB.setText(s);
+        freqC.setText(s);
 
     }
 }
