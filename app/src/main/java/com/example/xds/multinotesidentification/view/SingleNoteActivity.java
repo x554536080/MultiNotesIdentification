@@ -1,15 +1,21 @@
 package com.example.xds.multinotesidentification.view;
 
+import android.content.Context;
+import android.graphics.Canvas;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.widget.TextView;
 
 import com.example.xds.multinotesidentification.R;
+import com.example.xds.multinotesidentification.presenter.PresenterImpl;
 
 public class SingleNoteActivity extends AppCompatActivity implements SingleNoteView {
 
     TextView textView1;
     TextView textView2;
+    PresenterImpl presenter;
 
 
     @Override
@@ -17,6 +23,8 @@ public class SingleNoteActivity extends AppCompatActivity implements SingleNoteV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_note);
         init();
+        presenter = new PresenterImpl(this, this);
+        presenter.startRecord();
     }
 
     void init() {
@@ -36,7 +44,9 @@ public class SingleNoteActivity extends AppCompatActivity implements SingleNoteV
     }
 
     @Override
-    public void onModifyFreqText(String s) {
+    public void onModifyErrorText(String s) {
         textView2.setText(s);
     }
+
+
 }

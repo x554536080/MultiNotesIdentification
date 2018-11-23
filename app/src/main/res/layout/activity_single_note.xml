@@ -14,6 +14,7 @@
 
 
         <FrameLayout
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1">
@@ -28,6 +29,39 @@
                 android:background="#FFCB00"
 
                 >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="10dp"
+                    android:background="#ffffff"
+                    android:orientation="vertical">
+
+
+                    <FrameLayout
+                        android:id="@+id/up_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="3dp"
+                        android:background="#77000000">
+
+                    </FrameLayout>
+
+                    <FrameLayout
+                        android:id="@+id/down_frame"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1">
+
+                    </FrameLayout>
+                </LinearLayout>
+
 
             </FrameLayout>
 
@@ -45,12 +79,12 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:layout_gravity="bottom"
-                    android:layout_marginBottom="0dp"
+
                     android:id="@+id/single_note_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="40dp"
                     android:text="NOTE"
                     android:textSize="28sp" />
             </FrameLayout>
@@ -61,11 +95,11 @@
                 android:layout_weight="1">
 
                 <TextView
-                    android:layout_marginTop="0dp"
+                    android:layout_gravity="center"
                     android:id="@+id/single_error_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="36dp"
+                    android:layout_marginBottom="40dp"
                     android:text="0%"
                     android:textAllCaps="false"
                     android:textSize="18sp" />

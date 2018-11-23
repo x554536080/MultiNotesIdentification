@@ -45,14 +45,33 @@ public class PresenterImpl implements Presenter {
         showFreqView.onModifyFreqText(s);
     }
 
+
     @Override
-    public void onModifyMultiNoteText(String n1, String n2, String n3, String f1, String f2, String f3) {
-        multiNoteView.onModifyFreqA(f1);
-        multiNoteView.onModifyFreqB(f2);
-        multiNoteView.onModifyFreqC(f3);
-        multiNoteView.onModifyNoteA(n1);
-        multiNoteView.onModifyNoteB(n2);
-        multiNoteView.onModifyNoteC(n3);
+    public void onModifyMultiNoteTextA(String n, String f,String e) {
+        multiNoteView.onModifyFreqA(f);
+        multiNoteView.onModifyNoteA(n);
+        multiNoteView.onModifyErrorA(e);
+    }
+
+    @Override
+    public void onModifyMultiNoteTextB(String n, String f,String e) {
+        multiNoteView.onModifyFreqB(f);
+        multiNoteView.onModifyNoteB(n);
+        multiNoteView.onModifyErrorB(e);
+    }
+
+    @Override
+    public void onModifyMultiNoteTextC(String n, String f,String e) {
+        multiNoteView.onModifyFreqC(f);
+        multiNoteView.onModifyNoteC(n);
+        multiNoteView.onModifyErrorC(e);
+    }
+
+    @Override
+    public void onModifySingleNote(String n1, String error) {
+        singleNoteView.onModifyErrorText(error);
+        singleNoteView.onModifyNoteText(n1);
+
     }
 
     @Override

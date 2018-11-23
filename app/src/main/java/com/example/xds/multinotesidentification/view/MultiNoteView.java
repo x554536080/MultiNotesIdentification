@@ -8,5 +8,7 @@ public interface MultiNoteView {
     void onModifyFreqA(String s);
     void onModifyFreqB(String s);
     void onModifyFreqC(String s);
-
+    void onModifyErrorA(String s);
+    void onModifyErrorB(String s);
+    void onModifyErrorC(String s);
 }

@@ -15,6 +15,9 @@ public class MultiNoteActivity extends AppCompatActivity implements MultiNoteVie
     TextView freqA;
     TextView freqB;
     TextView freqC;
+    TextView errorA;
+    TextView errorB;
+    TextView errorC;
 
     PresenterImpl presenter;
 
@@ -42,6 +45,10 @@ public class MultiNoteActivity extends AppCompatActivity implements MultiNoteVie
         freqA = findViewById(R.id.multi_freq_a);
         freqB = findViewById(R.id.multi_freq_b);
         freqC = findViewById(R.id.multi_freq_c);
+
+        errorA = findViewById(R.id.multi_error_a);
+        errorB = findViewById(R.id.multi_error_b);
+        errorC = findViewById(R.id.multi_error_c);
     }
 
     @Override
@@ -75,6 +82,23 @@ public class MultiNoteActivity extends AppCompatActivity implements MultiNoteVie
     @Override
     public void onModifyFreqC(String s) {
         freqC.setText(s);
+
+    }
+
+    @Override
+    public void onModifyErrorA(String s) {
+        errorA.setText(s);
+    }
+
+    @Override
+    public void onModifyErrorB(String s) {
+        errorB.setText(s);
+
+    }
+
+    @Override
+    public void onModifyErrorC(String s) {
+        errorC.setText(s);
 
     }
 }

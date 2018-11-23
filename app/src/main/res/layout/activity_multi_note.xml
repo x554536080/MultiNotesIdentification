@@ -43,6 +43,16 @@
                 android:text="0Hz"
                 android:textAllCaps="false"
                 android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/multi_error_a"
+                android:textColor="#F0F0F0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0%"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -75,6 +85,15 @@
                 android:text="0Hz"
                 android:textAllCaps="false"
                 android:textSize="18sp" />
+            <TextView
+                android:id="@+id/multi_error_b"
+                android:textColor="#F0F0F0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0%"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -105,6 +124,15 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="0Hz"
+                android:textAllCaps="false"
+                android:textSize="18sp" />
+            <TextView
+                android:id="@+id/multi_error_c"
+                android:textColor="#F0F0F0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="0%"
                 android:textAllCaps="false"
                 android:textSize="18sp" />
         </LinearLayout>
