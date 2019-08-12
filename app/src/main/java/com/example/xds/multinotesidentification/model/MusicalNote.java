@@ -194,7 +194,6 @@ public class MusicalNote {
         if ((kFreq[0] > freq) || (freq > kFreq[87])) {
             return "超出范围";
         }
-
         for (int i = 1; i < 87; i++) {
             if (freq <= kFreq[i]) {
                 double kLog = Math.log(freq / kFreq[i - 1]);
