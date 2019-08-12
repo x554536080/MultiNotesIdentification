@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/MultiNotesIdentification.iml" filepath="$PROJECT_DIR$/MultiNotesIdentification.iml" />
-      <module fileurl="file://C:\Users\MSI\AndroidStudioProjects\MultiNotesIdentification\.idea\MultiNotesIdentification.iml" filepath="C:\Users\MSI\AndroidStudioProjects\MultiNotesIdentification\.idea\MultiNotesIdentification.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

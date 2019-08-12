@@ -3,7 +3,8 @@ package com.example.xds.multinotesidentification.model;
 
 public class MusicalNote {
 
-    private static String[] kName = new String[]{"	A	",
+    private static String[] kName = new String[]{
+            "	A	",
             "	A#	",
             "	B	",
             "	C	",
@@ -15,18 +16,6 @@ public class MusicalNote {
             "	F#	",
             "	G	",
             "	G#	",
-            "	A 1	",
-            "	A# 1	",
-            "	B 1	",
-            "	C 1	",
-            "	C# 1	",
-            "	D 1	",
-            "	D# 1	",
-            "	E 1	",
-            "	F 1	",
-            "	F# 1	",
-            "	G 1	",
-            "	G# 1	",
             "	A 2	",
             "	A# 2	",
             "	B 2	",
@@ -51,7 +40,7 @@ public class MusicalNote {
             "	F# 3	",
             "	G 3	",
             "	G# 3	",
-            "	A 4	",
+            "	A 3	",
             "	A# 4	",
             "	B 4	",
             "	C 4	",
@@ -90,7 +79,19 @@ public class MusicalNote {
             "	A 7	",
             "	A# 7	",
             "	B 7	",
-            "	C 7	"};
+            "	C 7	",
+            "	C# 7	",
+            "	D 7	",
+            "	D# 7	",
+            "	E 7	",
+            "	F 7	",
+            "	F# 7	",
+            "	G 7	",
+            "	G# 7	",
+            "	A 8	",
+            "	A# 8	",
+            "	B 8	",
+            "	C 8	"};
     private static double[] kFreq = new double[]{
             27.5,
             29.1,
