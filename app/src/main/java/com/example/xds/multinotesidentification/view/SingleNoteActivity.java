@@ -35,6 +35,7 @@ public class SingleNoteActivity extends AppCompatActivity implements SingleNoteV
 
     @Override
     protected void onDestroy() {
+        presenter = null;
         super.onDestroy();
     }
 
