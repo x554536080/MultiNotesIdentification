@@ -23,8 +23,8 @@ public class ShowFreqActivity extends AppCompatActivity implements ShowFreqView 
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         presenter.stopRecord();
+        super.onDestroy();
     }
 
     @Override

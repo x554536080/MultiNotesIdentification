@@ -13,22 +13,25 @@ import com.example.xds.multinotesidentification.model.MusicalNote;
 import com.example.xds.multinotesidentification.util.FFTUtil;
 
 
+import java.lang.reflect.Array;
 import java.text.NumberFormat;
 
 public class RecordThread extends Thread {
 
 
-    PresenterImpl presenter;
-    AudioRecord audioRecord;
+    private PresenterImpl presenter;
+    private AudioRecord audioRecord;
     boolean isRecording;
     int currentActivity;
 
 
-    int minBufferSize;
-    public static Complex complexes[];
+    private int minBufferSize;
+    public static Complex[] complexes;
 
-    String outTemp;
-    int point;
+    private String outTemp;
+    private int point;
+
+    int time = 2;
 
 
     RecordThread(PresenterImpl presenter) {
@@ -39,24 +42,21 @@ public class RecordThread extends Thread {
                 AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
         audioRecord = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 8000, AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT, minBufferSize * 16);
+                AudioFormat.ENCODING_PCM_16BIT, minBufferSize * 4 * time);
         Log.d("BufferSize", minBufferSize + "");
     }
 
     @Override
     public void run() {
 
-        short[] buffer = new short[minBufferSize * 16];
-        int length = up2int(16 * minBufferSize);
+        short[] buffer = new short[minBufferSize * 4 * time];
+        int length = up2int(4 * time * minBufferSize);
         audioRecord.startRecording();
-
-        NumberFormat numberFormat = NumberFormat.getInstance();
-        numberFormat.setMinimumFractionDigits(2);
 
         while (isRecording) {
             //平移提取
-            System.arraycopy(buffer, 4 * minBufferSize, buffer, 0, minBufferSize * 12);
-            audioRecord.read(buffer, minBufferSize * 12, minBufferSize * 4);
+            System.arraycopy(buffer, time * minBufferSize, buffer, 0, minBufferSize * 3 * time);
+            audioRecord.read(buffer, minBufferSize * 3 * time, minBufferSize * time);
 
             //正常提取
 //            int length = up2int(audioRecord.read(buffer, 0, minBufferSize*8));
@@ -70,15 +70,72 @@ public class RecordThread extends Thread {
             FFTUtil.fft(complexes, length);
 
             //排序部分
+            int[][] array = new int[length / 2][2];
+            FFTUtil.assignToArray(array, length);
+
             int[][] sort = new int[length / 2][2];
-            FFTUtil.sort(sort,length);
+            FFTUtil.assignToArray(sort, length);
+            FFTUtil.sort(sort, length);
+            int biggest = sort[0][1];
 
 
             //控制音量足够时才更新
-            if (sort[0][1] < 200000) {
+            if (biggest < 300000) {
                 continue;
             }
+            /**
+             * 从频谱图中读取第一个峰值位置
+             */
+//            int peakPos = FFTUtil.findFirstPeak(array, length, biggest);
+
+            int[][] result = FFTUtil.findTopNPeaks(array, 30);
+            float peakPos = FFTUtil.findFirstPeakBy3to2(result, length);
+            StringBuilder data = new StringBuilder();
+            for (int i = 0; i < 30; i++) {
+                data.append((result[i][0] * 8000f / length));
+                data.append(",   ");
+
+            }
+            Log.i("topPeaks", data.toString());
+            Log.i("hz", (float) sort[0][0] * 8000 / length + "");
+//            Log.i("peak", (float) peakPos * 8000 / length + "");
+
             //Log.d("maxSort",sort[0][1]+"");
+
+            /**
+             * 音名显示部分,活动号等于1
+             */
+            if (currentActivity == 1) {
+                String note = MusicalNote.maxLocation((float) peakPos * 8000 / length);
+//                String note = MusicalNote.maxLocation(sort[0][0] * 8000.0 / (length));
+                double errorNum = MusicalNote.percentage;
+                String error = errorNum + "";
+                String outError = "";
+                if (error.length() > 5) {
+                    if (errorNum < 0) {
+                        outError = "-" + error.substring(3, 5) + "%";
+                    } else {
+                        outError = "+" + error.substring(2, 4) + "%";
+                    }
+                }
+                if (!note.equals("超出范围"))
+                    updateSingleNote(note, outError);
+            }
+
+
+            //计算频率和输出显示
+
+            /**频率显示部分,活动号等于2**/
+            if (currentActivity == 2) {
+                outTemp = peakPos * 8000.0 / (length) + "";
+
+//                outTemp = sort[0][0] * 8000.0 / (length) + "";
+                point = outTemp.indexOf(".");
+                if (outTemp.length() - point > 2)
+                    updateShowFreq(outTemp.substring(0, point + 3) + "Hz");
+                else updateShowFreq(outTemp.substring(0, point + 2) + "0" + "Hz");
+            }
+
 
             /**多音识别部分,活动号等于3**/
             if (currentActivity == 3) {
@@ -142,6 +199,8 @@ public class RecordThread extends Thread {
                         outError2 = "+" + error2.substring(2, 4) + "%";
                     }
                 }
+                NumberFormat numberFormat = NumberFormat.getInstance();
+                numberFormat.setMinimumFractionDigits(2);
                 updateMultiNoteA(strNote[0], numberFormat.format(strMaxHz[0]) + "Hz", outError0);
                 updateMultiNoteB(strNote[1], numberFormat.format(strMaxHz[1]) + "Hz", outError1);
                 updateMultiNoteC(strNote[2], numberFormat.format(strMaxHz[2]) + "Hz", outError2);
@@ -199,36 +258,6 @@ public class RecordThread extends Thread {
 
             }
 
-
-
-            //计算频率和输出显示
-
-            /**频率显示部分,活动号等于2**/
-            if (currentActivity == 2) {
-                outTemp = sort[0][0] * 8000.0 / (length) + "";
-                point = outTemp.indexOf(".");
-                if (outTemp.length() - point > 2)
-                    updateShowFreq(outTemp.substring(0, point + 3) + "Hz");
-                else updateShowFreq(outTemp.substring(0, point + 2) + "0" + "Hz");
-            }
-
-            /**
-             * 音名显示部分,活动号等于1
-             */
-            if (currentActivity == 1) {
-                String note = MusicalNote.maxLocation(sort[0][0] * 8000.0 / (length));
-                double errorNum = MusicalNote.percentage;
-                String error = errorNum + "";
-                String outError = "";
-                if (error.length() > 5) {
-                    if (errorNum < 0) {
-                        outError = "-" + error.substring(3, 5) + "%";
-                    } else {
-                        outError = "+" + error.substring(2, 4) + "%";
-                    }
-                }
-                updateSingleNote(note, outError);
-            }
         }
 
 

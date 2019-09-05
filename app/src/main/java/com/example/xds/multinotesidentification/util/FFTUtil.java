@@ -1,7 +1,11 @@
 package com.example.xds.multinotesidentification.util;
 
+import android.util.Log;
+
 import com.example.xds.multinotesidentification.model.Complex;
 import com.example.xds.multinotesidentification.presenter.RecordThread;
+
+import java.util.Arrays;
 
 public class FFTUtil {
 
@@ -57,11 +61,16 @@ public class FFTUtil {
         }
     }
 
-    public static void sort(int[][] sort,int length) {
+    //复数值赋给数组
+    public static void assignToArray(int[][] sort, int length) {
         for (int i = 0; i < length / 2; i++) {
             sort[i][0] = i;
             sort[i][1] = RecordThread.complexes[i].getIntValue();
         }
+    }
+
+    //排序数组
+    public static void sort(int[][] sort, int length) {
         for (int j = 0; j < length / 2; j++) {
             for (int i = 0; i < length / 2 - 1 - j; i++) {
                 if (sort[i][1] < sort[i + 1][1]) {
@@ -75,4 +84,102 @@ public class FFTUtil {
             }
         }
     }
+
+    //找到前几个峰值的下标与幅值二维数组
+    public static int[][] findTopNPeaks(int[][] array, int N) {
+        int[][] peaks = new int[array.length][2];
+        int p = 0;
+        for (int i = 0; i < array.length; i++) {
+            if (i != 0 && i != array.length - 1)
+                if (array[i][1] > 50000)
+                    if (array[i + 1][1] < array[i][1] && array[i - 1][1] < array[i][1]) {
+                        peaks[p][0] = i;
+                        peaks[p][1] = array[i][1];
+                        p++;
+                    }
+        }
+        sort(peaks, peaks.length);
+        return Arrays.copyOfRange(peaks, 0, N);
+    }
+
+    //C3-C6基本准确，其余部分要分块识别
+    public static float findFirstPeakBy3to2(int[][] array, int length) {
+        float result = 0;
+        for (int i = 0; i < array.length; i++)
+            for (int j = 0; j < array.length; j++) {
+                if (array[i][1] == 0) continue;
+                float ratio = (float) array[j][0] / (float) array[i][0];
+                if (ratio > 1.49f && ratio < 1.51f) {
+                    float resultHere = array[i][0] / 2;
+                    if (result == 0)
+                        result = resultHere;
+                    if (resultHere < result)
+                        result = resultHere;
+                }
+            }
+        Log.i("result", result * 2 * 8000 / length + "");
+        return result;
+    }
+
+//    public static int method2(int[][] array, int length) {
+//
+//    }
+
+    public static int findFirstPeak(int[][] array, int length, int biggest) {
+        int peakPos = 0;
+
+        double maxDB = 80000000;
+        double maxDBThisTime = 10 * Math.log10(biggest / maxDB);
+        double[] volumeInDB = new double[length / 2];
+
+        for (int i = 0; i < length / 2; i++) {
+            volumeInDB[i] = 10 * Math.log10(array[i][1] / maxDB);
+        }
+
+        boolean isBigger;
+        for (int i = 20; i < length / 2 - 15; i++) {
+            isBigger = false;
+            //如果值比较高
+            if (volumeInDB[i] > (maxDBThisTime - 14)) {
+                //如果是个顶点
+                if (volumeInDB[i + 1] < volumeInDB[i] && volumeInDB[i - 1] < volumeInDB[i])
+                //如果比周围高出许多
+//                    if (volumeInDB[i] - volumeInDB[i - 3] > 15 && volumeInDB[i] - volumeInDB[i + 3] > 15) {
+                {
+                    //如果周围领域他最大          //且一直在降 || volumeInDB[i + j + 1] - volumeInDB[i + j] > 0
+                    int range = 0;
+                    if (i < 350) range = 3;
+                    if (i > 350 && i < 800) range = 12;
+                    if (i > 800) range = 25;
+                    for (int j = 0; j < 10; j++) {
+                        isBigger = true;
+                        if (volumeInDB[i - j] > volumeInDB[i] || volumeInDB[i + j] > volumeInDB[i]) {
+                            isBigger = false;
+                            break;
+//                                }
+                        }
+                    }
+                }
+            }
+            if (isBigger) {
+                peakPos = i;
+                return peakPos;
+            }
+        }
+        return 999;
+
+
+//        for (int i = 0; i < length / 2 - 1; i++) {
+//            if (volumeInDB[i + 1] < volumeInDB[i] &&
+//                    (((float) i * 8000 / length) > 20)
+//            ) {
+//                peakPos = i;
+//                return peakPos;
+//            }
+//        }
+//
+//
+//        return peakPos;
+    }
+
 }

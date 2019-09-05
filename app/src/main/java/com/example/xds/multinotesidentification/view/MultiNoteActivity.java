@@ -33,8 +33,8 @@ public class MultiNoteActivity extends AppCompatActivity implements MultiNoteVie
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         presenter.stopRecord();
+        super.onDestroy();
     }
 
     void init() {
